@@ -95,45 +95,111 @@ router.get('/dashboard/:role', (req, res) => {
   res.json(dashboardData[role as keyof typeof dashboardData]);
 });
 
+// Mock database for departments
+const departments = [
+  {
+    "id": 1,
+    "department": "Software",
+    "employeeCount": 5,
+    "totalHours": 160,
+    "workHours": 130,
+    "leaveHours": 30,
+    "projects": {
+      "p1": { "name": "Internal Tools", "hours": 70 },
+      "p2": { "name": "Client App", "hours": 60 }
+    }
+  },
+  {
+    "id": 2,
+    "department": "Hardware",
+    "employeeCount": 4,
+    "totalHours": 140,
+    "workHours": 110,
+    "leaveHours": 30,
+    "projects": {
+      "p3": { "name": "Sensor Board", "hours": 90 },
+      "p4": { "name": "PCB Design", "hours": 50 }
+    }
+  },
+  {
+    "id": 3,
+    "department": "Firmware",
+    "employeeCount": 3,
+    "totalHours": 120,
+    "workHours": 95,
+    "leaveHours": 25,
+    "projects": {
+      "p5": { "name": "Embedded OS", "hours": 60 },
+      "p6": { "name": "Device Drivers", "hours": 35 }
+    }
+  }
+];
+
 // Get all departments (admin only)
 router.get('/departments', (req, res) => {
-  const departments = [
-    {
-      "department": "Software",
-      "employeeCount": 5,
-      "totalHours": 160,
-      "workHours": 130,
-      "leaveHours": 30,
-      "projects": {
-        "p1": { "name": "Internal Tools", "hours": 70 },
-        "p2": { "name": "Client App", "hours": 60 }
-      }
-    },
-    {
-      "department": "Hardware",
-      "employeeCount": 4,
-      "totalHours": 140,
-      "workHours": 110,
-      "leaveHours": 30,
-      "projects": {
-        "p3": { "name": "Sensor Board", "hours": 90 },
-        "p4": { "name": "PCB Design", "hours": 50 }
-      }
-    },
-    {
-      "department": "Firmware",
-      "employeeCount": 3,
-      "totalHours": 120,
-      "workHours": 95,
-      "leaveHours": 25,
-      "projects": {
-        "p5": { "name": "Embedded OS", "hours": 60 },
-        "p6": { "name": "Device Drivers", "hours": 35 }
-      }
-    }
-  ];
-  
   res.json(departments);
+});
+
+// Create a new department (admin only)
+router.post('/departments', (req, res) => {
+  const { department, employeeCount, workHours, leaveHours, projects } = req.body;
+  
+  if (!department || !employeeCount || !workHours || !leaveHours) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const newDepartment = {
+    id: Math.max(...departments.map(d => d.id)) + 1,
+    department,
+    employeeCount: parseInt(employeeCount),
+    totalHours: parseInt(workHours) + parseInt(leaveHours),
+    workHours: parseInt(workHours),
+    leaveHours: parseInt(leaveHours),
+    projects: projects || {}
+  };
+
+  departments.push(newDepartment);
+  res.status(201).json(newDepartment);
+});
+
+// Update a department (admin only)
+router.put('/departments/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const { department, employeeCount, workHours, leaveHours, projects } = req.body;
+  
+  const departmentIndex = departments.findIndex(d => d.id === id);
+  if (departmentIndex === -1) {
+    return res.status(404).json({ error: 'Department not found' });
+  }
+
+  if (!department || !employeeCount || !workHours || !leaveHours) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  departments[departmentIndex] = {
+    ...departments[departmentIndex],
+    department,
+    employeeCount: parseInt(employeeCount),
+    totalHours: parseInt(workHours) + parseInt(leaveHours),
+    workHours: parseInt(workHours),
+    leaveHours: parseInt(leaveHours),
+    projects: projects || departments[departmentIndex].projects
+  };
+
+  res.json(departments[departmentIndex]);
+});
+
+// Delete a department (admin only)
+router.delete('/departments/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const departmentIndex = departments.findIndex(d => d.id === id);
+  
+  if (departmentIndex === -1) {
+    return res.status(404).json({ error: 'Department not found' });
+  }
+
+  const deletedDepartment = departments.splice(departmentIndex, 1)[0];
+  res.json({ message: 'Department deleted successfully', department: deletedDepartment });
 });
 
 export default router;

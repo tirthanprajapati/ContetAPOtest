@@ -77,7 +77,20 @@ const EmployeeDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Employee Dashboard</h1>
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 text-white">
+        <div className="flex items-center space-x-4">
+          <div className="bg-white bg-opacity-20 p-4 rounded-xl">
+            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+            </svg>
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">Employee Workspace</h1>
+            <p className="text-emerald-100">Track your tasks, hours, and progress</p>
+          </div>
+        </div>
+      </div>
       
       {/* Profile Section */}
       <div className="bg-white shadow rounded-lg">
