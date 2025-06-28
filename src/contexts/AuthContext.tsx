@@ -1,31 +1,7 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
-
-// Types
-interface User {
-  id: number;
-  email: string;
-  name: string;
-  role: 'admin' | 'user' | 'employee';
-}
-
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-}
-
-type AuthAction =
-  | { type: 'LOGIN_START' }
-  | { type: 'LOGIN_SUCCESS'; payload: { user: User; token: string } }
-  | { type: 'LOGIN_FAILURE' }
-  | { type: 'LOGOUT' }
-  | { type: 'SET_LOADING'; payload: boolean };
-
-interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
-}
+import React, { useReducer, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import type { AuthState, AuthAction, AuthContextType } from '../types/auth';
+import { AuthContext } from './AuthContextStore';
 
 // Initial state
 const initialState: AuthState = {
@@ -78,9 +54,6 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return state;
   }
 };
-
-// Context
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Provider component
 interface AuthProviderProps {
@@ -166,14 +139,3 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-// Custom hook to use auth context
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
-export type { User };

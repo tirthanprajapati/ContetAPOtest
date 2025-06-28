@@ -8,21 +8,21 @@ const users = [
   {
     id: 1,
     email: 'admin@example.com',
-    password: '$2a$10$8Z8Z8Z8Z8Z8Z8Z8Z8Z8Z8O', // password: admin123
+    password: 'admin123', // password: admin123
     role: 'admin',
     name: 'Admin User'
   },
   {
     id: 2,
     email: 'user@example.com',
-    password: '$2a$10$8Z8Z8Z8Z8Z8Z8Z8Z8Z8Z8O', // password: user123
+    password: 'user123', // password: user123
     role: 'user',
     name: 'Normal User'
   },
   {
     id: 3,
     email: 'employee@example.com',
-    password: '$2a$10$8Z8Z8Z8Z8Z8Z8Z8Z8Z8Z8O', // password: employee123
+    password: 'employee123', // password: employee123
     role: 'employee',
     name: 'Employee User'
   }
@@ -93,7 +93,7 @@ router.get('/me', async (req, res) => {
       role: user.role
     });
   } catch {
-    res.status(401).json({ message: 'Invalid token' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
