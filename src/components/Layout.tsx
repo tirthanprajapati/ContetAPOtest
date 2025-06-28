@@ -17,17 +17,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <h1 className="text-xl font-bold text-gray-900">Dashboard App</h1>
-              </div>
-            </div>
+            // ...existing code...
             
             <div className="flex items-center space-x-4">
               {user && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-700">Welcome, {user.name}</span>
+                    <div className="text-right">
+                      <div className="text-sm text-gray-700">{user.name}</div>
+                      <div className="text-xs text-gray-500">{user.department.name} - {user.position}</div>
+                    </div>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
                       user.role === 'employee' ? 'bg-blue-100 text-blue-800' :

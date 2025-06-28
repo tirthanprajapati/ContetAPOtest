@@ -39,7 +39,9 @@ const Login: React.FC = () => {
           <div className="text-xs text-blue-700 space-y-1">
             <div><strong>Admin:</strong> admin@example.com / admin123</div>
             <div><strong>User:</strong> user@example.com / user123</div>
-            <div><strong>Employee:</strong> employee@example.com / employee123</div>
+            <div><strong>Employee (Engineering):</strong> employee@example.com / employee123</div>
+            <div><strong>HR Manager:</strong> hr@example.com / hr123</div>
+            <div><strong>Finance:</strong> finance@example.com / finance123</div>
           </div>
         </div>
 

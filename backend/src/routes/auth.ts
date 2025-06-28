@@ -1,32 +1,8 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import { users } from '../data/mockData';
 
 const router = express.Router();
-
-// Mock user database
-const users = [
-  {
-    id: 1,
-    email: 'admin@example.com',
-    password: 'admin123', // password: admin123
-    role: 'admin',
-    name: 'Admin User'
-  },
-  {
-    id: 2,
-    email: 'user@example.com',
-    password: 'user123', // password: user123
-    role: 'user',
-    name: 'Normal User'
-  },
-  {
-    id: 3,
-    email: 'employee@example.com',
-    password: 'employee123', // password: employee123
-    role: 'employee',
-    name: 'Employee User'
-  }
-];
 
 // Login endpoint
 router.post('/login', async (req, res) => {
@@ -39,11 +15,13 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // For demo purposes, we'll accept any password that matches the pattern
+    // For demo purposes, we'll accept predefined passwords
     const validPasswords = {
       'admin@example.com': 'admin123',
       'user@example.com': 'user123',
-      'employee@example.com': 'employee123'
+      'employee@example.com': 'employee123',
+      'hr@example.com': 'hr123',
+      'finance@example.com': 'finance123'
     };
 
     if (password !== validPasswords[email as keyof typeof validPasswords]) {
@@ -63,7 +41,11 @@ router.post('/login', async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
+        department: user.department,
+        position: user.position,
+        joinDate: user.joinDate,
+        permissions: user.permissions
       }
     });
   } catch {
@@ -90,7 +72,11 @@ router.get('/me', async (req, res) => {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role
+      role: user.role,
+      department: user.department,
+      position: user.position,
+      joinDate: user.joinDate,
+      permissions: user.permissions
     });
   } catch {
     res.status(500).json({ message: 'Server error' });
